@@ -33,13 +33,16 @@ client.on('presenceUpdate', (oldMember, newMember) => {
 
     if (newMember.presence.game !== oldMember.presence.game) {
         if (oldMember.presence.game === null) {
-            channel.send(newMember.displayName + ' started playing ' + newMember.presence.game.name);
+            channel.send(newMember.displayName + ' started playing ' + newMember.presence.game.name
+                        + ' time ' + newMember.presence.game.time);
         } else if (newMember.presence.game !== null) {
-            channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.name 
+            channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.name
+                        + ' time ' + oldMember.presence.game.timestamps.start
                         + ' and started playing ' + newMember.presence.game.name
                         + ' time ' + newMember.presence.game.timestamps.start);
         } else {
-            channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.name);
+            channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.name
+                        + ' time ' + oldMember.presence.game.time);
         }
     }
 });
