@@ -34,7 +34,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
     if (newMember.presence.game !== oldMember.presence.game) {
         if (oldMember.presence.game === null) {
             channel.send(newMember.displayName + ' started playing ' + newMember.presence.game.applicationID
-                        + ' time ' + newMember.presence.game.start);
+                        + ' time ' + newMember.presence.game.timestamps.start);
         } else if (newMember.presence.game !== null) {
             channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.applicationID
                         + ' time ' + oldMember.presence.game.timestamps.start
@@ -42,7 +42,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
                         + ' time ' + newMember.presence.game.timestamps.start);
         } else {
             channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.applicationID
-                        + ' time ' + oldMember.presence.game.start);
+                        + ' time ' + oldMember.presence.game.timestamps.start);
         }
     }
 });
