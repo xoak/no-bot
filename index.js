@@ -23,6 +23,9 @@ client.on('message', msg => {
             console.log(cp_count);
         }
     }
+    if (msg.content === '!id') {
+        msg.channel.send('no-bot');
+    }
 });
 
 client.on('presenceUpdate', (oldMember, newMember) => {
