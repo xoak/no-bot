@@ -28,23 +28,45 @@ client.on('message', msg => {
     }
 });
 
+var games = {};
+var bee = 'this';
+
 client.on('presenceUpdate', (oldMember, newMember) => {
     const channel = newMember.guild.channels.find(ch => ch.name === 'bots');
 
-    if (newMember.presence.game !== oldMember.presence.game) {
-        if (oldMember.presence.game === null) {
-            channel.send(newMember.displayName + ' started playing ' + newMember.presence.game.applicationID
-                        + ' time ' + newMember.presence.game.timestamps.start);
-        } else if (newMember.presence.game !== null) {
-            channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.applicationID
-                        + ' time ' + oldMember.presence.game.timestamps.start
-                        + ' and started playing ' + newMember.presence.game.applicationID
-                        + ' time ' + newMember.presence.game.timestamps.start);
+    if (newMember.presence.game){
+        console.log(newMember.presence.game);
+
+        channel.send(newMember.user.tag + ': ' + newMember.presence.game.name);
+        if (newMember.user.tag in games){
+            channel.send('user already in games');
         } else {
-            channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.applicationID
-                        + ' time ' + oldMember.presence.game.timestamps.start);
+            games[newMember.user.tag] = { [newMember.presence.game.name]: newMember.presence.game.timestamps.start};
+            channel.send('user added to games');
+            console.log(games);
+            //console.log(games['base#0525'][Spectacle]);
+            console.log(games['base#0525']['Spectacle']);
         }
+
+    } else {
+        channel.send(newMember.presence.status + ' no game');
     }
+    
+
+    // if (newMember.presence.game !== oldMember.presence.game) {
+    //     if (oldMember.presence.game === null) {
+    //         channel.send(newMember.displayName + ' started playing ' + newMember.presence.game.applicationID
+    //                     + ' time ' + newMember.presence.game.timestamps.start);
+    //     } else if (newMember.presence.game !== null) {
+    //         channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.applicationID
+    //                     + ' time ' + oldMember.presence.game.timestamps.start
+    //                     + ' and started playing ' + newMember.presence.game.applicationID
+    //                     + ' time ' + newMember.presence.game.timestamps.start);
+    //     } else {
+    //         channel.send(newMember.displayName + ' stopped playing ' + oldMember.presence.game.applicationID
+    //                     + ' time ' + oldMember.presence.game.timestamps.start);
+    //     }
+    // }
 });
 
 client.login(process.env.BOT_TOKEN);
