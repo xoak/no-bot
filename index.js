@@ -37,7 +37,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
     if (newMember.presence.game){
         console.log(newMember.presence.game);
 
-        channel.send(newMember.user.tag + ': ' + newMember.presence.game.name);
+        console.log(newMember.user.tag + ': ' + newMember.presence.game.name);
         if (newMember.user.tag in games){
             console.log('user already in games');
         } else {
