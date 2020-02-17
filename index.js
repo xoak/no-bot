@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const client = new Discord.Client();
+const googleIt = require('google-it');
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -26,31 +27,47 @@ client.on('message', msg => {
     if (msg.content === '!id') {
         msg.channel.send('no-bot');
     }
-});
-
-var games = {};
-var bee = 'this';
-
-client.on('presenceUpdate', (oldMember, newMember) => {
-    const channel = newMember.guild.channels.find(ch => ch.name === 'bots');
-
-    if (newMember.presence.game){
-        console.log(newMember.presence.game);
-
-        console.log(newMember.user.tag + ': ' + newMember.presence.game.name);
-        if (newMember.user.tag in games){
-            console.log('user already in games');
-        } else {
-            games[newMember.user.tag] = { [newMember.presence.game.name]: newMember.presence.game.timestamps.start};
-            console.log('user added to games');
-            console.log(games);
-            //console.log(games['base#0525'][Spectacle]);
-            console.log(games['base#0525']['Spectacle']);
-        }
-    } else {
-        console.log(newMember.presence.status + ' no game');
+    if (msg.content.startsWith('!play ')){
+        let search = msg.content.slice(8);
+        //console.log(search);
+        const options = {
+          };
+          googleIt({options, 
+                'query': 'youtube ' + search, 
+                'limit': '5',
+                'only-urls': true
+            }).then(results => {
+            // access to results object her
+            console.log(results[0].link);
+            msg.channel.send('$play ' + results[0].link);
+          }).catch(e => {
+            // any possible errors that might have occurred (like no Internet connection)
+          })
     }
-    
 });
+
+//var games = {};
+
+// client.on('presenceUpdate', (oldMember, newMember) => {
+//     const channel = newMember.guild.channels.find(ch => ch.name === 'bots');
+
+//     if (newMember.presence.game){
+//         console.log(newMember.presence.game);
+
+//         console.log(newMember.user.tag + ': ' + newMember.presence.game.name);
+//         if (newMember.user.tag in games){
+//             console.log('user already in games');
+//         } else {
+//             games[newMember.user.tag] = { [newMember.presence.game.name]: newMember.presence.game.timestamps.start};
+//             console.log('user added to games');
+//             console.log(games);
+//             //console.log(games['base#0525'][Spectacle]);
+//             console.log(games['base#0525']['Spectacle']);
+//         }
+//     } else {
+//         console.log(newMember.presence.status + ' no game');
+//     }
+    
+// });
 
 client.login(process.env.BOT_TOKEN);
