@@ -32,7 +32,7 @@ client.on('message', msg => {
         //console.log(search);
         const options = {};
         googleIt({options, 
-                'query': 'youtube ' + search, 
+                'query': 'site:youtube.com ' + search, 
                 'limit': '5',
                 'only-urls': true
             }).then(results => {
