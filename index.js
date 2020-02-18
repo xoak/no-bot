@@ -28,26 +28,31 @@ client.on('message', msg => {
         msg.channel.send('no-bot');
     }
     if (msg.content.startsWith('!play ')){
-        let search = msg.content.slice(8);
-        //console.log(search);
-        const options = {};
-        googleIt({options, 
-                'query': 'site:youtube.com ' + search, 
-                'limit': '5',
-                'only-urls': true
-            }).then(results => {
-                // access to results object her
-                console.log(results[0].link);
-                if (results[0].link.includes('playlist')){
-                    msg.reply('Can\'t do playlists.  I\'ll get banned.');
-                } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
-                    msg.channel.send('$play ' + results[0].link.slice(0,43));
-                } else {
-                    msg.reply('This link looks like something that will get me banned.');
-                }
-            }).catch(e => {
-            // any possible errors that might have occurred (like no Internet connection)
-          })
+        //protection from noah
+        if (msg.content.startsWith('!play http')){
+            msg.reply('I can\'t process URL\'s');
+        } else {
+            let search = msg.content.slice(8);
+            //console.log(search);
+            const options = {};
+            googleIt({options, 
+                    'query': 'site:youtube.com ' + search, 
+                    'limit': '5',
+                    'only-urls': true
+                }).then(results => {
+                    // access to results object her
+                    console.log(results[0].link);
+                    if (results[0].link.includes('playlist')){
+                        msg.reply('Can\'t do playlists.  I\'ll get banned.');
+                    } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
+                        msg.channel.send('$play ' + results[0].link.slice(0,43));
+                    } else {
+                        msg.reply('This link looks like something that will get me banned.');
+                    }
+                }).catch(e => {
+                // any possible errors that might have occurred (like no Internet connection)
+            })
+        }
     }
 });
 
