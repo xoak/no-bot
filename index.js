@@ -42,7 +42,7 @@ client.on('message', msg => {
                 if (results[0].link.includes('playlist')){
                     msg.reply('Can\'t do playlists.  I\'ll get banned.');
                 } else {
-                    msg.channel.send('$play ' + results[0].link.slice(0,42));
+                    msg.channel.send('$play ' + results[0].link.slice(0,43));
                 }
             }).catch(e => {
             // any possible errors that might have occurred (like no Internet connection)
