@@ -38,11 +38,12 @@ client.on('message', msg => {
             }).then(results => {
                 // access to results object her
                 console.log(results[0].link);
-                //32+11
                 if (results[0].link.includes('playlist')){
                     msg.reply('Can\'t do playlists.  I\'ll get banned.');
-                } else {
+                } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
                     msg.channel.send('$play ' + results[0].link.slice(0,43));
+                } else {
+                    msg.reply('This link looks like something that will get me banned.');
                 }
             }).catch(e => {
             // any possible errors that might have occurred (like no Internet connection)
