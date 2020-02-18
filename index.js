@@ -30,17 +30,20 @@ client.on('message', msg => {
     if (msg.content.startsWith('!play ')){
         let search = msg.content.slice(8);
         //console.log(search);
-        const options = {
-          };
-          googleIt({options, 
+        const options = {};
+        googleIt({options, 
                 'query': 'youtube ' + search, 
                 'limit': '5',
                 'only-urls': true
             }).then(results => {
-            // access to results object her
-            console.log(results[0].link);
-            msg.channel.send('$play ' + results[0].link);
-          }).catch(e => {
+                // access to results object her
+                console.log(results[0].link);
+                if (results[0].link.includes('playlist')){
+                    msg.reply('Can\'t do playlists.  I\'ll get banned.');
+                } else{
+                    msg.channel.send('$play ' + results[0].link);
+                }
+            }).catch(e => {
             // any possible errors that might have occurred (like no Internet connection)
           })
     }
