@@ -13,6 +13,19 @@ cp_count = 0;
 msg_rand = Math.floor((Math.random() * 100) + 1);
 msg_count = 0;
 
+songQueue = {};
+
+var timer = setInterval(playSong, 60000);
+
+function playSong() {
+    var songs = Object.keys(songQueue);
+    if (songs.length > 0){
+        let videoID = songs[0];
+        client.channels.get('498871309862830081').send('$playd https://www.youtube.com/watch?v=' + videoID);
+        delete songQueue[videoID];
+    }
+}
+
 client.on('message', msg => {
     if (msg.content.toLowerCase().includes(' cp')) {
         if (cp_rand === cp_count) {
@@ -27,11 +40,18 @@ client.on('message', msg => {
     if (msg.content === '!id') {
         msg.channel.send('no-bot');
     }
+
     if (msg.content.startsWith('!play ')){
         //protection from noah
         console.log(msg.content);
         if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
-            msg.channel.send('$' + msg.content.slice(1));
+            let videoID = msg.content.slice(38);
+            if (videoID in songQueue){
+                songQueue[videoID]++;
+            } else {
+                songQueue[videoID] = 1;
+            }
+            console.log(songQueue);
         } else if (msg.content.startsWith('!play http')){
             msg.reply('I can\'t process non-video URL\'s yet.');
         } else {
@@ -48,7 +68,13 @@ client.on('message', msg => {
                     if (results[0].link.includes('playlist')){
                         msg.reply('Can\'t do playlists.  I\'ll get banned.');
                     } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
-                        msg.channel.send('$play ' + results[0].link.slice(0,43));
+                        let videoID = results[0].link.slice(32,43);
+                        console.log(typeof(videoID));
+                        if (videoID in songQueue){
+                            songQueue[videoID]++;
+                        } else {
+                            songQueue[videoID] = 1;
+                        }
                     } else {
                         msg.reply('Search returned a playlist. Try changing your search string.');
                     }
