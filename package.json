@@ -20,7 +20,8 @@
   "dependencies": {
     "discord.js": "^11.5.1",
     "google-it": "^1.5.0",
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "ytpl": "^0.1.20"
   },
   "devDependencies": {
     "dotenv": "^8.2.0"

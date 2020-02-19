@@ -1,6 +1,7 @@
 const { Client, RichEmbed } = require('discord.js');
 const client = new Client();
 const googleIt = require('google-it');
+const ytpl = require('ytpl');
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -62,6 +63,27 @@ client.on('message', msg => {
         })
     }
 
+    if (msg.content.startsWith('!playlist ')){
+        if (msg.content.startsWith('!playlist https://www.youtube.com/playlist?list=')){
+            //do playlist stuff
+            playlistID = msg.content.slice(48);
+            console.log(playlistID);
+            ytpl(playlistID, function(err, playlist) {
+                if(err) throw err;
+                //console.log(playlist.items.length);
+                for (item in playlist.items){
+                  let videoID = playlist.items[item].id;
+                  songQueue[videoID] = 1;
+                  //console.log(playlist.items[item].id);
+                }
+                msg.channel.send('Playlist is being queued.');
+                console.log(songQueue);
+            });
+        } else {
+            msg.replay('That does not look like a playlist link.');
+        }
+    }
+
     if (msg.content.startsWith('!play ')){
         //protection from noah
         curTime = new Date().getTime() / 1000;
@@ -95,7 +117,7 @@ client.on('message', msg => {
                     // access to results object her
                     console.log(results[0].link);
                     if (results[0].link.includes('playlist')){
-                        msg.reply('Can\'t do playlists.  I\'ll get banned.');
+                        msg.reply('Use the !playlist command to queue playlists.');
                     } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
                         let videoID = results[0].link.slice(32,43);
                         console.log(typeof(videoID));
