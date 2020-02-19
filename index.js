@@ -29,8 +29,11 @@ client.on('message', msg => {
     }
     if (msg.content.startsWith('!play ')){
         //protection from noah
-        if (msg.content.startsWith('!play http')){
-            msg.reply('I can\'t process URL\'s');
+        console.log(msg.content);
+        if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
+            msg.channel.send('$' + msg.content.slice(1));
+        } else if (msg.content.startsWith('!play http')){
+            msg.reply('I can\'t process non-video URL\'s yet.');
         } else {
             let search = msg.content.slice(8);
             //console.log(search);
@@ -47,7 +50,7 @@ client.on('message', msg => {
                     } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
                         msg.channel.send('$play ' + results[0].link.slice(0,43));
                     } else {
-                        msg.reply('This link looks like something that will get me banned.');
+                        msg.reply('Search returned a playlist. Try changing your search string.');
                     }
                 }).catch(e => {
                 // any possible errors that might have occurred (like no Internet connection)
