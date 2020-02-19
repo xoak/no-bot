@@ -1,5 +1,5 @@
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Client, RichEmbed } = require('discord.js');
+const client = new Client();
 const googleIt = require('google-it');
 
 client.on('ready', () => {
@@ -47,10 +47,15 @@ client.on('message', msg => {
         search = msg.content.slice(8);
         googleIt({options, 
                 'query': search,
-                'only-urls': true,
+                'only-urls': false,
                 'limit': '5'
             }).then(results => {
-            msg.channel.send(results[0].link);
+                console.log(results);
+                const embed = new RichEmbed()
+                    .setTitle(results[0].title)
+                    .setURL(results[0].link)
+                    .setDescription(results[0].snippet);
+                msg.channel.send(embed);
         }).catch(e => {
             // any possible errors that might have occurred (like no Internet connection)
         })
