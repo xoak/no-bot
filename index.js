@@ -52,13 +52,15 @@ client.on('message', msg => {
             if (curTime - lastPlayRequest > 60){
                 lastPlayRequest = curTime;
                 msg.channel.send('$' + msg.content.slice(1));
+                msg.channel.send('Playing your song now.');
             } else if (videoID in songQueue){
                 songQueue[videoID]++;
+                msg.channel.send('Song will queue in 60 seconds.');
             } else {
                 songQueue[videoID] = 1;
+                msg.channel.send('Song will queue in 60 seconds.');
             }
             console.log(songQueue);
-            msg.channel.send('Song will queue in 60 seconds.');
         } else if (msg.content.startsWith('!play http')){
             msg.reply('I can\'t process non-video URL\'s yet.');
         } else {
@@ -80,12 +82,14 @@ client.on('message', msg => {
                         if (curTime - lastPlayRequest > 60){
                             lastPlayRequest = curTime;
                             msg.channel.send('$play ' + results[0].link.slice(0,43));
+                            msg.channel.send('Playing your song now.');
                         } else if (videoID in songQueue){
                             songQueue[videoID]++;
+                            msg.channel.send('Song will queue in 60 seconds.');
                         } else {
                             songQueue[videoID] = 1;
+                            msg.channel.send('Song will queue in 60 seconds.');
                         }
-                        msg.channel.send('Song will queue in 60 seconds.');
                     } else {
                         msg.reply('Search returned a playlist. Try changing your search string.');
                     }
