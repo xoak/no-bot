@@ -47,7 +47,7 @@ client.on('message', msg => {
         curTime = new Date().getTime() / 1000;
         if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
             let videoID = msg.content.slice(38);
-            if (curTime - lastPlayRequest > 60){
+            if (curTime - lastPlayRequest > 60 && Object.keys(songQueue).length === 0){
                 msg.channel.send('$' + msg.content.slice(1));
                 msg.channel.send('Playing your song now.');
             } else if (videoID in songQueue){
@@ -76,7 +76,7 @@ client.on('message', msg => {
                     } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
                         let videoID = results[0].link.slice(32,43);
                         console.log(typeof(videoID));
-                        if (curTime - lastPlayRequest > 60){
+                        if (curTime - lastPlayRequest > 60 && Object.keys(songQueue).length === 0){
                             msg.channel.send('$play ' + results[0].link.slice(0,43));
                             msg.channel.send('Playing your song now.');
                         } else if (videoID in songQueue){
