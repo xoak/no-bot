@@ -17,7 +17,7 @@ msg_count = 0;
 songQueue = {};
 lastPlayRequest = 0;
 
-var timer = setInterval(playSong, 60000);
+var timer = setInterval(playSong, 150000);
 
 function playSong() {
     var songs = Object.keys(songQueue);
@@ -90,7 +90,7 @@ client.on('message', msg => {
         //play direct link
         if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
             let videoID = msg.content.slice(38);
-            if (curTime - lastPlayRequest > 60 && Object.keys(songQueue).length === 0){
+            if (curTime - lastPlayRequest > 150 && Object.keys(songQueue).length === 0){
                 msg.channel.send('$' + msg.content.slice(1));
                 msg.channel.send('Playing your song now.');
             } else if (videoID in songQueue){
@@ -123,7 +123,7 @@ client.on('message', msg => {
                         console.log(typeof(videoID));
                         console.log(curTime);
                         console.log(lastPlayRequest);
-                        if (curTime - lastPlayRequest > 60 && Object.keys(songQueue).length === 0){
+                        if (curTime - lastPlayRequest > 150 && Object.keys(songQueue).length === 0){
                             msg.channel.send('$play ' + results[0].link.slice(0,43));
                             msg.channel.send('Playing your song now.');
                         } else if (videoID in songQueue){
