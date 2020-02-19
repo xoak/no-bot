@@ -21,7 +21,7 @@ function playSong() {
     var songs = Object.keys(songQueue);
     if (songs.length > 0){
         let videoID = songs[0];
-        client.channels.get('498871309862830081').send('$playd https://www.youtube.com/watch?v=' + videoID);
+        client.channels.get('498871309862830081').send('$play https://www.youtube.com/watch?v=' + videoID);
         delete songQueue[videoID];
     }
 }
@@ -52,6 +52,7 @@ client.on('message', msg => {
                 songQueue[videoID] = 1;
             }
             console.log(songQueue);
+            msg.channel.send('Song will queue in 60 seconds.');
         } else if (msg.content.startsWith('!play http')){
             msg.reply('I can\'t process non-video URL\'s yet.');
         } else {
@@ -74,7 +75,9 @@ client.on('message', msg => {
                             songQueue[videoID]++;
                         } else {
                             songQueue[videoID] = 1;
+                            
                         }
+                        msg.channel.send('Song will queue in 60 seconds.');
                     } else {
                         msg.reply('Search returned a playlist. Try changing your search string.');
                     }
