@@ -14,6 +14,8 @@ msg_rand = Math.floor((Math.random() * 100) + 1);
 msg_count = 0;
 
 songQueue = {};
+lastPlayRequest = 0;
+var d = new Date();
 
 var timer = setInterval(playSong, 60000);
 
@@ -43,10 +45,14 @@ client.on('message', msg => {
 
     if (msg.content.startsWith('!play ')){
         //protection from noah
+        let curTime = d.getTime() / 1000;
         console.log(msg.content);
         if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
             let videoID = msg.content.slice(38);
-            if (videoID in songQueue){
+            if (curTime - lastPlayRequest > 60){
+                lastPlayRequest = curTime;
+                msg.channel.send('$' + msg.content.slice(1));
+            } else if (videoID in songQueue){
                 songQueue[videoID]++;
             } else {
                 songQueue[videoID] = 1;
@@ -71,11 +77,13 @@ client.on('message', msg => {
                     } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
                         let videoID = results[0].link.slice(32,43);
                         console.log(typeof(videoID));
-                        if (videoID in songQueue){
+                        if (curTime - lastPlayRequest > 60){
+                            lastPlayRequest = curTime;
+                            msg.channel.send('$play ' + results[0].link.slice(0,43));
+                        } else if (videoID in songQueue){
                             songQueue[videoID]++;
                         } else {
                             songQueue[videoID] = 1;
-                            
                         }
                         msg.channel.send('Song will queue in 60 seconds.');
                     } else {
