@@ -54,7 +54,8 @@ client.on('message', msg => {
                 const embed = new RichEmbed()
                     .setTitle(results[0].title)
                     .setURL(results[0].link)
-                    .setDescription(results[0].snippet);
+                    .setDescription(results[0].snippet)
+                    .setFooter(results[0].link);
                 msg.channel.send(embed);
         }).catch(e => {
             // any possible errors that might have occurred (like no Internet connection)
