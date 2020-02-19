@@ -42,6 +42,20 @@ client.on('message', msg => {
         msg.channel.send('no-bot');
     }
 
+    if (msg.content.startsWith('!google ')){
+        const options = {};
+        search = msg.content.slice(8);
+        googleIt({options, 
+                'query': search,
+                'only-urls': true,
+                'limit': '5'
+            }).then(results => {
+            msg.channel.send(results[0].link);
+        }).catch(e => {
+            // any possible errors that might have occurred (like no Internet connection)
+        })
+    }
+
     if (msg.content.startsWith('!play ')){
         //protection from noah
         curTime = new Date().getTime() / 1000;
