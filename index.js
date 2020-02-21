@@ -102,11 +102,11 @@ client.on('message', msg => {
         } else {
             msg.replay('That does not look like a playlist link.');
         }
+        playSong();
     }
 
     if (msg.content.startsWith('!play ')){
         //protection from noah
-        //curTime = new Date().getTime() / 1000;
         //play direct link
         if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
             let videoID = msg.content.slice(38);
