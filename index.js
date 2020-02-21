@@ -28,7 +28,10 @@ function playSong() {
         voiceChannel.join()
             .then(connection => {
                 url = 'https://www.youtube.com/watch?v=J5nBEWAomyw';
-                const stream = ytdl(url, { filter: 'audioonly', highWaterMark: 1<<25});
+                const stream = ytdl(url, { filter: 'audioonly', 
+                                           highWaterMark: 1<<25,
+                                           quality: 'highestaudio'
+                                        });
                 const dispatcher = connection.playStream(stream, {highWaterMark: 1});
                 dispatcher.on('end', () => {
                     delete songQueue[videoID];
