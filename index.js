@@ -2,6 +2,7 @@ const { Client, RichEmbed } = require('discord.js');
 const client = new Client();
 const googleIt = require('google-it');
 const ytpl = require('ytpl');
+const ytdl = require('ytdl-core');
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -17,15 +18,34 @@ msg_count = 0;
 songQueue = {};
 lastPlayRequest = 0;
 
-var timer = setInterval(playSong, 150000);
+//var timer = setInterval(playSong, 150000);
 
 function playSong() {
     var songs = Object.keys(songQueue);
     if (songs.length > 0){
         let videoID = songs[0];
-        client.channels.get('498871309862830081').send('$play https://www.youtube.com/watch?v=' + videoID);
-        delete songQueue[videoID];
+        let voiceChannel = client.channels.get('228406262298050571');
+        voiceChannel.join()
+            .then(connection => {
+                url = 'https://www.youtube.com/watch?v=J5nBEWAomyw';
+                const stream = ytdl(url, { filter: 'audioonly'});
+                const dispatcher = connection.playStream(stream);
+                dispatcher.on('end', () => {
+                    delete songQueue[videoID];
+                    playSong();                    
+                });
+            });
+    } else {
+        console.log('queue is empty');
     }
+}
+
+function addToQueue(videoID) {
+    songQueue[videoID] = 1;
+}
+
+function removeFromQueue(videoID) {
+    delete songQueue[videoID];
 }
 
 client.on('message', msg => {
@@ -73,7 +93,7 @@ client.on('message', msg => {
                 //console.log(playlist.items.length);
                 for (item in playlist.items){
                   let videoID = playlist.items[item].id;
-                  songQueue[videoID] = 1;
+                  addToQueue(videoID);
                   //console.log(playlist.items[item].id);
                 }
                 msg.channel.send('Playlist is being queued.');
@@ -86,25 +106,13 @@ client.on('message', msg => {
 
     if (msg.content.startsWith('!play ')){
         //protection from noah
-        curTime = new Date().getTime() / 1000;
+        //curTime = new Date().getTime() / 1000;
         //play direct link
         if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
             let videoID = msg.content.slice(38);
-            if (curTime - lastPlayRequest > 150 && Object.keys(songQueue).length === 0){
-                msg.channel.send('$' + msg.content.slice(1));
-                msg.channel.send('Playing your song now.');
-            } else if (videoID in songQueue){
-                songQueue[videoID]++;
-                msg.channel.send('Song will queue in 60 seconds.');
-            } else {
-                songQueue[videoID] = 1;
-                msg.channel.send('Song will queue in 60 seconds.');
-            }
-            lastPlayRequest = curTime;
+            //add url to queue
+            addToQueue(videoID);
             console.log(songQueue);
-        } else if (msg.content.startsWith('!play http')){
-            msg.reply('I can\'t process non-video URL\'s yet.');
-        //search
         } else {
             let search = msg.content.slice(8);
             //console.log(search);
@@ -121,19 +129,9 @@ client.on('message', msg => {
                     } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
                         let videoID = results[0].link.slice(32,43);
                         console.log(typeof(videoID));
-                        console.log(curTime);
-                        console.log(lastPlayRequest);
-                        if (curTime - lastPlayRequest > 150 && Object.keys(songQueue).length === 0){
-                            msg.channel.send('$play ' + results[0].link.slice(0,43));
-                            msg.channel.send('Playing your song now.');
-                        } else if (videoID in songQueue){
-                            songQueue[videoID]++;
-                            msg.channel.send('Song will queue in 60 seconds.');
-                        } else {
-                            songQueue[videoID] = 1;
-                            msg.channel.send('Song will queue in 60 seconds.');
-                        }
-                        lastPlayRequest = curTime;
+                        // add song to queue
+                        addToQueue(videoID);
+
                     } else {
                         msg.reply('Search returned a playlist. Try changing your search string.');
                     }
@@ -141,31 +139,8 @@ client.on('message', msg => {
                 // any possible errors that might have occurred (like no Internet connection)
             })
         }
+        playSong();
     }
 });
-
-//var games = {};
-
-// client.on('presenceUpdate', (oldMember, newMember) => {
-//     const channel = newMember.guild.channels.find(ch => ch.name === 'bots');
-
-//     if (newMember.presence.game){
-//         console.log(newMember.presence.game);
-
-//         console.log(newMember.user.tag + ': ' + newMember.presence.game.name);
-//         if (newMember.user.tag in games){
-//             console.log('user already in games');
-//         } else {
-//             games[newMember.user.tag] = { [newMember.presence.game.name]: newMember.presence.game.timestamps.start};
-//             console.log('user added to games');
-//             console.log(games);
-//             //console.log(games['base#0525'][Spectacle]);
-//             console.log(games['base#0525']['Spectacle']);
-//         }
-//     } else {
-//         console.log(newMember.presence.status + ' no game');
-//     }
-    
-// });
 
 client.login(process.env.BOT_TOKEN);
