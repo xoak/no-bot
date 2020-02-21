@@ -23,7 +23,10 @@ lastPlayRequest = 0;
 
 //var timer = setInterval(playSong, 150000);
 async function play(connection, url, videoID) {
-    const dispatcher = connection.play(await ytdl(url), { 
+    const dispatcher = connection.play(await ytdl(url, {
+        highWaterMark: 1<<25,
+        quality: 'highestaudio'
+    }), { 
         type: 'opus',
         highWaterMark: 1
     });
