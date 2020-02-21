@@ -23,7 +23,10 @@ lastPlayRequest = 0;
 
 //var timer = setInterval(playSong, 150000);
 async function play(connection, url, videoID) {
-    const dispatcher = connection.play(await ytdl(url), { type: 'opus'});
+    const dispatcher = connection.play(await ytdl(url), { 
+        type: 'opus',
+        highWaterMark: 1
+    });
     dispatcher.on('finish', () => {
         delete songQueue[videoID];
         playSong();                  
