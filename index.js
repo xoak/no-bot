@@ -27,7 +27,7 @@ function playSong() {
         let voiceChannel = client.channels.get('228406262298050571');
         voiceChannel.join()
             .then(connection => {
-                url = 'https://www.youtube.com/watch?v=J5nBEWAomyw';
+                url = 'https://www.youtube.com/watch?v=' + videoID;
                 const stream = ytdl(url, { filter: 'audioonly', 
                                            highWaterMark: 1<<25,
                                            quality: 'highestaudio'
