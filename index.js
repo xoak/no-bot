@@ -2,7 +2,10 @@ const { Client, RichEmbed } = require('discord.js');
 const client = new Client();
 const googleIt = require('google-it');
 const ytpl = require('ytpl');
-const ytdl = require('ytdl-core');
+//const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core-discord');
+ 
+
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -19,24 +22,23 @@ songQueue = {};
 lastPlayRequest = 0;
 
 //var timer = setInterval(playSong, 150000);
+async function play(connection, url, videoID) {
+    const dispatcher = connection.play(await ytdl(url), { type: 'opus'});
+    dispatcher.on('finish', () => {
+        delete songQueue[videoID];
+        playSong();                  
+    });
+}
 
 function playSong() {
     var songs = Object.keys(songQueue);
     if (songs.length > 0){
         let videoID = songs[0];
-        let voiceChannel = client.channels.get('228406262298050571');
+        let voiceChannel = client.channels.cache.get('228406262298050571');
         voiceChannel.join()
             .then(connection => {
                 url = 'https://www.youtube.com/watch?v=' + videoID;
-                const stream = ytdl(url, { filter: 'audioonly', 
-                                           highWaterMark: 1<<25,
-                                           quality: 'highestaudio'
-                                        });
-                const dispatcher = connection.playStream(stream, {highWaterMark: 1});
-                dispatcher.on('end', () => {
-                    delete songQueue[videoID];
-                    playSong();                    
-                });
+                play(connection, url, videoID);
             });
     } else {
         console.log('queue is empty');
