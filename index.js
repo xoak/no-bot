@@ -122,6 +122,10 @@ client.on('message', msg => {
         console.log(songQueue);
     }
 
+    if (msg.content.startsWith('!skip')){
+        playSong();
+    }
+
     if (msg.content.startsWith('!play ')){
         //protection from noah
         //play direct link
