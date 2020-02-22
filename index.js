@@ -114,6 +114,11 @@ client.on('message', msg => {
         playSong();
     }
 
+    if (msg.content.startsWith('!skip')){
+        dispatcher.end();
+        playSong;
+    }
+
     if (msg.content.startsWith('!play ')){
         //protection from noah
         //play direct link
