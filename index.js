@@ -30,7 +30,7 @@ async function play(connection, url, videoID) {
         type: 'opus',
         highWaterMark: 1
     });
-    delete songQueue[videoID];
+    removeFromQueue(videoID);
     dispatcher.on('finish', () => {
         playSong();                  
     });
@@ -116,10 +116,11 @@ client.on('message', msg => {
         }
     }
 
-    // if (msg.content.startsWith('!skip')){
-    //     dispatcher.end();
-    //     playSong;
-    // }
+    if (msg.content.startsWith('!clear')){
+        songQueue = {};
+        msg.channel.send('Queue has been cleared.');
+        console.log(songQueue);
+    }
 
     if (msg.content.startsWith('!play ')){
         //protection from noah
