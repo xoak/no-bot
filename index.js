@@ -20,6 +20,7 @@ msg_count = 0;
 
 songQueue = {};
 lastPlayRequest = 0;
+playing = false;
 
 //var timer = setInterval(playSong, 150000);
 async function play(connection, url, videoID) {
@@ -32,6 +33,7 @@ async function play(connection, url, videoID) {
     });
     removeFromQueue(videoID);
     dispatcher.on('finish', () => {
+        playing = false;
         playSong();                  
     });
 }
@@ -49,6 +51,7 @@ function playSong() {
             .then(connection => {
                 url = 'https://www.youtube.com/watch?v=' + videoID;
                 play(connection, url, videoID);
+                playing = true;
             });
     } else {
         console.log('queue is empty');
@@ -109,7 +112,7 @@ client.on('message', msg => {
                 }
                 msg.channel.send('Playlist is being queued.');
                 console.log(songQueue);
-                playSong();
+                if (!playing) playSong();
             });
         } else {
             msg.reply('That does not look like a playlist link.');
@@ -128,6 +131,7 @@ client.on('message', msg => {
             console.log('queue empty');
             let voiceChannel = client.channels.cache.get('228406262298050571');
             voiceChannel.leave();
+            playing = false;
             console.log(songQueue);
         } else {
             console.log(songQueue);
@@ -142,7 +146,7 @@ client.on('message', msg => {
             let videoID = msg.content.slice(38);
             //add url to queue
             addToQueue(videoID);
-            playSong();
+            if (!playing) playSong();
             console.log(songQueue);
         } else {
             let search = msg.content.slice(8);
@@ -162,7 +166,7 @@ client.on('message', msg => {
                         console.log(typeof(videoID));
                         // add song to queue
                         addToQueue(videoID);
-                        playSong();
+                        if (!playing) playSong();
                     } else {
                         msg.reply('Search returned a playlist. Try changing your search string.');
                     }
