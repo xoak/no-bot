@@ -123,7 +123,16 @@ client.on('message', msg => {
     }
 
     if (msg.content.startsWith('!skip')){
-        playSong();
+        queue = Object.keys(songQueue).length;
+        if (queue === 0) {
+            console.log('queue empty');
+            let voiceChannel = client.channels.cache.get('228406262298050571');
+            voiceChannel.leave();
+            console.log(songQueue);
+        } else {
+            console.log(songQueue);
+            playSong();
+        }
     }
 
     if (msg.content.startsWith('!play ')){
