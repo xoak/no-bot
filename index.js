@@ -30,8 +30,8 @@ async function play(connection, url, videoID) {
         type: 'opus',
         highWaterMark: 1
     });
+    delete songQueue[videoID];
     dispatcher.on('finish', () => {
-        delete songQueue[videoID];
         playSong();                  
     });
 }
