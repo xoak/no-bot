@@ -36,6 +36,10 @@ async function play(connection, url, videoID) {
     });
 }
 
+function addToQueue(videoID) {
+    songQueue[videoID] = 1;
+}
+
 function playSong() {
     var songs = Object.keys(songQueue);
     if (songs.length > 0){
@@ -49,10 +53,6 @@ function playSong() {
     } else {
         console.log('queue is empty');
     }
-}
-
-function addToQueue(videoID) {
-    songQueue[videoID] = 1;
 }
 
 function removeFromQueue(videoID) {
