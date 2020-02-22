@@ -109,11 +109,11 @@ client.on('message', msg => {
                 }
                 msg.channel.send('Playlist is being queued.');
                 console.log(songQueue);
+                playSong();
             });
         } else {
             msg.reply('That does not look like a playlist link.');
         }
-        playSong();
     }
 
     // if (msg.content.startsWith('!skip')){
