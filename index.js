@@ -109,7 +109,7 @@ client.on('message', msg => {
                 console.log(songQueue);
             });
         } else {
-            msg.replay('That does not look like a playlist link.');
+            msg.reply('That does not look like a playlist link.');
         }
         playSong();
     }
