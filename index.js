@@ -129,6 +129,7 @@ client.on('message', msg => {
             let videoID = msg.content.slice(38);
             //add url to queue
             addToQueue(videoID);
+            playSong();
             console.log(songQueue);
         } else {
             let search = msg.content.slice(8);
@@ -148,7 +149,7 @@ client.on('message', msg => {
                         console.log(typeof(videoID));
                         // add song to queue
                         addToQueue(videoID);
-
+                        playSong();
                     } else {
                         msg.reply('Search returned a playlist. Try changing your search string.');
                     }
@@ -156,7 +157,6 @@ client.on('message', msg => {
                 // any possible errors that might have occurred (like no Internet connection)
             })
         }
-        playSong();
     }
 });
 
