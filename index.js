@@ -21,6 +21,7 @@ msg_count = 0;
 songQueue = {};
 lastPlayRequest = 0;
 playing = false;
+currVideoID = 0;
 
 //var timer = setInterval(playSong, 150000);
 async function play(connection, url, videoID) {
@@ -34,6 +35,7 @@ async function play(connection, url, videoID) {
     removeFromQueue(videoID);
     dispatcher.on('finish', () => {
         playing = false;
+        currVideoID = 0;
         playSong();                  
     });
 }
@@ -52,9 +54,25 @@ function playSong() {
                 url = 'https://www.youtube.com/watch?v=' + videoID;
                 play(connection, url, videoID);
                 playing = true;
+                currVideoID = videoID;
             });
     } else {
         console.log('queue is empty');
+    }
+}
+
+function replay() {
+    if (playing){
+        let voiceChannel = client.channels.cache.get('228406262298050571');
+        videoID = currVideoID;
+        voiceChannel.join()
+            .then(connection => {
+                url = 'https://www.youtube.com/watch?v=' + videoID;
+                play(connection, url, videoID);
+                playing = true;
+            });
+    } else {
+        console.log('no song to replay');
     }
 }
 
@@ -123,6 +141,11 @@ client.on('message', msg => {
         songQueue = {};
         msg.channel.send('Queue has been cleared.');
         console.log(songQueue);
+    }
+
+    if (msg.content.startsWith('!replay')){
+        msg.channel.send('Replaying song.');
+        replay();
     }
 
     if (msg.content.startsWith('!skip')){
