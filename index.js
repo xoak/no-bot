@@ -116,7 +116,7 @@ client.on('message', msg => {
     }
 
     if (msg.content.startsWith('!playlist ')){
-        if (msg.content.startsWith('!playlist https://www.youtube.com/playlist?list=')){
+        if (msg.content.startsWith('!playlist https://www.youtube.com/playlist?list=P')){
             //do playlist stuff
             playlistID = msg.content.slice(48);
             console.log(playlistID);
