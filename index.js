@@ -3,10 +3,9 @@ const client = new Client();
 const googleIt = require('google-it');
 const ytpl = require('ytpl');
 //const ytdl = require('ytdl-core');
-const ytdl = require('ytdl-core-discord');
+
+var functions = require('./functions');
  
-
-
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -18,66 +17,13 @@ cp_count = 0;
 msg_rand = Math.floor((Math.random() * 100) + 1);
 msg_count = 0;
 
-songQueue = {};
-lastPlayRequest = 0;
-playing = false;
-currVideoID = 0;
-
-//var timer = setInterval(playSong, 150000);
-async function play(connection, url, videoID) {
-    const dispatcher = connection.play(await ytdl(url, {
-        quality: 'highestaudio',
-        highWaterMark: 1<<25
-    }), { 
-        type: 'opus',
-        highWaterMark: 1
-    });
-    removeFromQueue(videoID);
-    dispatcher.on('finish', () => {
-        playing = false;
-        currVideoID = 0;
-        playSong();                  
-    });
-}
+client.songQueue = {};
+client.lastPlayRequest = 0;
+client.playing = false;
+client.currVideoID = 0;
 
 function addToQueue(videoID) {
-    songQueue[videoID] = 1;
-}
-
-function playSong() {
-    var songs = Object.keys(songQueue);
-    if (songs.length > 0){
-        let videoID = songs[0];
-        let voiceChannel = client.channels.cache.get('228406262298050571');
-        voiceChannel.join()
-            .then(connection => {
-                url = 'https://www.youtube.com/watch?v=' + videoID;
-                play(connection, url, videoID);
-                playing = true;
-                currVideoID = videoID;
-            });
-    } else {
-        console.log('queue is empty');
-    }
-}
-
-function replay() {
-    if (playing){
-        let voiceChannel = client.channels.cache.get('228406262298050571');
-        videoID = currVideoID;
-        voiceChannel.join()
-            .then(connection => {
-                url = 'https://www.youtube.com/watch?v=' + videoID;
-                play(connection, url, videoID);
-                playing = true;
-            });
-    } else {
-        console.log('no song to replay');
-    }
-}
-
-function removeFromQueue(videoID) {
-    delete songQueue[videoID];
+    client.songQueue[videoID] = 1;
 }
 
 client.on('message', msg => {
@@ -129,8 +75,8 @@ client.on('message', msg => {
                   //console.log(playlist.items[item].id);
                 }
                 msg.channel.send('Playlist is being queued.');
-                console.log(songQueue);
-                if (!playing) playSong();
+                console.log(client.songQueue);
+                if (!client.playing) functions.playSong(client);
             });
         } else {
             msg.reply('That does not look like a playlist link.');
@@ -138,27 +84,27 @@ client.on('message', msg => {
     }
 
     if (msg.content.startsWith('!clear')){
-        songQueue = {};
+        client.songQueue = {};
         msg.channel.send('Queue has been cleared.');
-        console.log(songQueue);
+        console.log(client.songQueue);
     }
 
     if (msg.content.startsWith('!replay')){
         msg.channel.send('Replaying song.');
-        replay();
+        functions.replay(client);
     }
 
     if (msg.content.startsWith('!skip')){
-        queue = Object.keys(songQueue).length;
+        queue = Object.keys(client.songQueue).length;
         if (queue === 0) {
             console.log('queue empty');
             let voiceChannel = client.channels.cache.get('228406262298050571');
             voiceChannel.leave();
-            playing = false;
-            console.log(songQueue);
+            client.playing = false;
+            console.log(client.songQueue);
         } else {
-            console.log(songQueue);
-            playSong();
+            console.log(client.songQueue);
+            functions.playSong(client);
         }
     }
 
@@ -169,8 +115,8 @@ client.on('message', msg => {
             let videoID = msg.content.slice(38);
             //add url to queue
             addToQueue(videoID);
-            if (!playing) playSong();
-            console.log(songQueue);
+            if (!client.playing) functions.playSong(client);
+            console.log(client.songQueue);
         } else {
             let search = msg.content.slice(8);
             //console.log(search);
@@ -189,7 +135,7 @@ client.on('message', msg => {
                         console.log(typeof(videoID));
                         // add song to queue
                         addToQueue(videoID);
-                        if (!playing) playSong();
+                        if (!client.playing) functions.playSong(client);
                     } else {
                         msg.reply('Search returned a playlist. Try changing your search string.');
                     }
