@@ -1,4 +1,4 @@
-const { Client, RichEmbed } = require('discord.js');
+const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 const googleIt = require('google-it');
 const ytpl = require('ytpl');
@@ -50,7 +50,7 @@ client.on('message', msg => {
                 'limit': '5'
             }).then(results => {
                 console.log(results);
-                const embed = new RichEmbed()
+                const embed = new MessageEmbed()
                     .setTitle(results[0].title)
                     .setURL(results[0].link)
                     .setDescription(results[0].snippet)
