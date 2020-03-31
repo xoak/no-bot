@@ -124,9 +124,19 @@ client.on('message', msg => {
                 limit : 1,
                 type : 'video'
             }).then(function(results){
+                console.log(results);
                 let videoID = results[0].link.slice(28,39);
-                addToQueue(videoID);
-                if (!client.playing) functions.playSong(client);
+                let title = results[0].title;
+                if (videoID === 'ww.googlead') {
+                    msg.channel.send('try something else: ' + '`' + search + '`');
+                    msg.channel.send('```' + results[0].link + '```');
+                } else {
+                    console.log(videoID);
+                    addToQueue(videoID);
+                    msg.channel.send('Adding `' + title + '` to the queue.');
+                    console.log(client.songQueue);
+                    if (!client.playing) functions.playSong(client);
+                }
             }, function(err){
                 console.log(err);
             });
