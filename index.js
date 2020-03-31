@@ -2,7 +2,7 @@ const { Client, MessageEmbed } = require('discord.js');
 const client = new Client();
 const googleIt = require('google-it');
 const ytpl = require('ytpl');
-//const ytdl = require('ytdl-core');
+const ytscrape = require('scrape-youtube');
 
 var functions = require('./functions');
  
@@ -118,30 +118,18 @@ client.on('message', msg => {
             if (!client.playing) functions.playSong(client);
             console.log(client.songQueue);
         } else {
-            let search = msg.content.slice(8);
-            //console.log(search);
-            const options = {};
-            googleIt({options, 
-                    'query': 'site:youtube.com ' + search, 
-                    'limit': '5',
-                    'only-urls': true
-                }).then(results => {
-                    // access to results object her
-                    console.log(results[0].link);
-                    if (results[0].link.includes('playlist')){
-                        msg.reply('Use the !playlist command to queue playlists.');
-                    } else if (results[0].link.startsWith('https://www.youtube.com/watch?v=')){
-                        let videoID = results[0].link.slice(32,43);
-                        console.log(typeof(videoID));
-                        // add song to queue
-                        addToQueue(videoID);
-                        if (!client.playing) functions.playSong(client);
-                    } else {
-                        msg.reply('Search returned a playlist. Try changing your search string.');
-                    }
-                }).catch(e => {
-                // any possible errors that might have occurred (like no Internet connection)
-            })
+            let search = msg.content.slice(6);
+            console.log(search);
+            ytscrape.search(search, {
+                limit : 1,
+                type : 'video'
+            }).then(function(results){
+                let videoID = results[0].link.slice(28,39);
+                addToQueue(videoID);
+                if (!client.playing) functions.playSong(client);
+            }, function(err){
+                console.log(err);
+            });
         }
     }
 });
