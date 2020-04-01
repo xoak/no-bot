@@ -35,6 +35,10 @@ exports.removeFromQueue = function removeFromQueue(videoID, client) {
     delete client.songQueue[videoID];
 };
 
+exports.addToQueue = function addToQueue(videoID, client) {
+    client.songQueue[videoID] = 1;
+};
+
 exports.playSong = function playSong(client) {
     var songs = Object.keys(client.songQueue);
     if (songs.length > 0){

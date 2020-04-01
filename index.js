@@ -1,11 +1,14 @@
-const { Client, MessageEmbed } = require('discord.js');
+const { Client, MessageEmbed, Collection } = require('discord.js');
 const client = new Client();
-const googleIt = require('google-it');
-const ytpl = require('ytpl');
-const ytscrape = require('scrape-youtube');
+const fs = require('fs');
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-var functions = require('./functions');
- 
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
+}
+
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -22,14 +25,14 @@ client.lastPlayRequest = 0;
 client.playing = false;
 client.currVideoID = 0;
 
-function addToQueue(videoID) {
-    client.songQueue[videoID] = 1;
-}
-
-client.on('message', msg => {
-    if (msg.content.toLowerCase().includes(' cp')) {
+client.on('message', message => {
+    if (message.content === '!ping'){
+        let args = '';
+        client.commands.get('ping').execute(message, args);
+    }
+    if (message.content.toLowerCase().includes(' cp')) {
         if (cp_rand === cp_count) {
-            msg.reply('no u');
+            message.reply('no u');
             cp_count = 0;
             cp_rand = Math.floor((Math.random() * 10) + 1);
         } else {
@@ -37,110 +40,32 @@ client.on('message', msg => {
             console.log(cp_count);
         }
     }
-    if (msg.content === '!id') {
-        msg.channel.send('no-bot');
+    if (message.content === '!id') {
+        message.channel.send('no-bot');
     }
-
-    if (msg.content.startsWith('!google ')){
-        const options = {};
-        search = msg.content.slice(8);
-        googleIt({options, 
-                'query': search,
-                'only-urls': false,
-                'limit': '5'
-            }).then(results => {
-                console.log(results);
-                const embed = new MessageEmbed()
-                    .setTitle(results[0].title)
-                    .setURL(results[0].link)
-                    .setDescription(results[0].snippet)
-                    .setFooter(results[0].link);
-                msg.channel.send(embed);
-        }).catch(e => {
-            // any possible errors that might have occurred (like no Internet connection)
-        })
+    if (message.content.startsWith('!google ')){
+        let args = message.content.slice(8);
+        client.commands.get('google').execute(message, args);
     }
-
-    if (msg.content.startsWith('!playlist ')){
-        if (msg.content.startsWith('!playlist https://www.youtube.com/playlist?list=P')){
-            //do playlist stuff
-            playlistID = msg.content.slice(48);
-            console.log(playlistID);
-            ytpl(playlistID, function(err, playlist) {
-                if(err) throw err;
-                //console.log(playlist.items.length);
-                for (item in playlist.items){
-                  let videoID = playlist.items[item].id;
-                  addToQueue(videoID);
-                  //console.log(playlist.items[item].id);
-                }
-                msg.channel.send('Playlist is being queued.');
-                console.log(client.songQueue);
-                if (!client.playing) functions.playSong(client);
-            });
-        } else {
-            msg.reply('That does not look like a playlist link.');
-        }
+    if (message.content.startsWith('!playlist ')){
+        let args = message.content.slice(10);
+        client.commands.get('playlist').execute(message, args);
     }
-
-    if (msg.content.startsWith('!clear')){
-        client.songQueue = {};
-        msg.channel.send('Queue has been cleared.');
-        console.log(client.songQueue);
+    if (message.content.startsWith('!clear')){
+        let args = '';
+        client.commands.get('clear').execute(message, args);
     }
-
-    if (msg.content.startsWith('!replay')){
-        msg.channel.send('Replaying song.');
-        functions.replay(client);
+    if (message.content.startsWith('!replay')){
+        let args = '';
+        client.commands.get('replay').execute(message, args);
     }
-
-    if (msg.content.startsWith('!skip')){
-        queue = Object.keys(client.songQueue).length;
-        if (queue === 0) {
-            console.log('queue empty');
-            let voiceChannel = client.channels.cache.get('228406262298050571');
-            voiceChannel.leave();
-            client.playing = false;
-            console.log(client.songQueue);
-        } else {
-            console.log(client.songQueue);
-            functions.playSong(client);
-        }
+    if (message.content.startsWith('!skip')){
+        let args = '';
+        client.commands.get('skip').execute(message, args);
     }
-
-    if (msg.content.startsWith('!play ')){
-        //protection from noah
-        //play direct link
-        if (msg.content.startsWith('!play https://www.youtube.com/watch?v=') && msg.content.length === 49){
-            let videoID = msg.content.slice(38);
-            //add url to queue
-            addToQueue(videoID);
-            if (!client.playing) functions.playSong(client);
-            console.log(client.songQueue);
-        } else {
-            let search = msg.content.slice(6);
-            console.log(search);
-            ytscrape.search(search, {
-                limit : 1,
-                type : 'video'
-            }).then(function(results){
-                console.log(results);
-                let videoID = results[0].link.slice(28,39);
-                let title = results[0].title;
-                if (videoID === 'ww.googlead') {
-                    msg.channel.send('try something else: ' + '`' + search + '`');
-                    msg.channel.send('```' + results[0].link + '```');
-                } else {
-                    console.log(videoID);
-                    addToQueue(videoID);
-                    msg.channel.send('Adding `' + title + '` to the queue.');
-                    console.log(client.songQueue);
-                    if (!client.playing) functions.playSong(client);
-                }
-            }, function(err){
-                console.log(err);
-            });
-        }
+    if (message.content.startsWith('!play ')){
+        let args = message.content.slice(6);
+       client.commands.get('play').execute(message, args);
     }
 });
 
