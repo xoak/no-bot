@@ -13,9 +13,9 @@ client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
 });
 
-cp_rand = Math.floor((Math.random() * 10) + 1);
-console.log(cp_rand);
-cp_count = 0;
+client.cp_rand = Math.floor((Math.random() * 10) + 1);
+console.log(client.cp_rand);
+client.cp_count = 0;
 
 client.songQueue = {};
 client.playing = false;
@@ -23,21 +23,10 @@ client.currVideoID = 0;
 
 client.on('message', message => {
     if (message.content === '!ping'){
-        let args = '';
-        client.commands.get('ping').execute(message, args);
+        client.commands.get('ping').execute(message);
     }
     if (message.content.toLowerCase().includes(' cp')) {
-        if (cp_rand === cp_count) {
-            message.reply('no u');
-            cp_count = 0;
-            cp_rand = Math.floor((Math.random() * 10) + 1);
-        } else {
-            cp_count++;
-            console.log(cp_count);
-        }
-    }
-    if (message.content === '!id') {
-        message.channel.send('no-bot');
+        client.commands.get('cp').execute(message);
     }
     if (message.content.startsWith('!google ')){
         let args = message.content.slice(8);
@@ -48,16 +37,13 @@ client.on('message', message => {
         client.commands.get('playlist').execute(message, args);
     }
     if (message.content.startsWith('!clear')){
-        let args = '';
-        client.commands.get('clear').execute(message, args);
+        client.commands.get('clear').execute(message);
     }
     if (message.content.startsWith('!replay')){
-        let args = '';
-        client.commands.get('replay').execute(message, args);
+        client.commands.get('replay').execute(message);
     }
     if (message.content.startsWith('!skip')){
-        let args = '';
-        client.commands.get('skip').execute(message, args);
+        client.commands.get('skip').execute(message);
     }
     if (message.content.startsWith('!play ')){
         let args = message.content.slice(6);
