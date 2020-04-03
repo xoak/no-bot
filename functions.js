@@ -54,4 +54,4 @@ exports.playSong = function playSong(client) {
     } else {
         console.log('queue is empty');
     }
-}
+};

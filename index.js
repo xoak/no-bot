@@ -1,4 +1,4 @@
-const { Client, MessageEmbed, Collection } = require('discord.js');
+const { Client, Collection } = require('discord.js');
 const client = new Client();
 const fs = require('fs');
 client.commands = new Collection();
@@ -16,9 +16,6 @@ client.on('ready', () => {
 cp_rand = Math.floor((Math.random() * 10) + 1);
 console.log(cp_rand);
 cp_count = 0;
-
-msg_rand = Math.floor((Math.random() * 100) + 1);
-msg_count = 0;
 
 client.songQueue = {};
 client.playing = false;
