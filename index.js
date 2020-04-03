@@ -21,7 +21,6 @@ msg_rand = Math.floor((Math.random() * 100) + 1);
 msg_count = 0;
 
 client.songQueue = {};
-client.lastPlayRequest = 0;
 client.playing = false;
 client.currVideoID = 0;
 
