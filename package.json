@@ -5,18 +5,18 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon -r dotenv/config index.js"
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xoak/no-bot.git"
+    "url": "git+https://github.com/your-welcome/no-bot"
   },
-  "author": "",
+  "author": "your welcome",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/xoak/no-bot/issues"
+    "url": "https://github.com/your-welcome/no-bot/issues"
   },
-  "homepage": "https://github.com/xoak/no-bot#readme",
+  "homepage": "https://github.com/your-welcome/no-bot#readme",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
     "discord.js": "github:discordjs/discord.js",

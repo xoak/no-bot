@@ -3,6 +3,7 @@ const client = new Client();
 const fs = require('fs');
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const config = require('./config/config.json');
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -51,4 +52,4 @@ client.on('message', message => {
     }
 });
 
-client.login(process.env.BOT_TOKEN);
+client.login(config.token);
