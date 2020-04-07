@@ -3,7 +3,7 @@ const noahId = '229419764315848704';
 module.exports = {
 	name: 'cp',
 	description: 'Trolls Noah',
-	execute(message, args) {
+	execute(message) {
         let noah = message.author.id === noahId;
 		if (message.client.cp_rand === message.client.cp_count && noah) {
             message.reply('no u');

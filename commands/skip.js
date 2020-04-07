@@ -1,9 +1,9 @@
-const functions = require('../functions');
+const functions = require('../music/functions');
 
 module.exports = {
 	name: 'skip',
 	description: 'Skips current song',
-	execute(message, args) {
+	execute(message) {
 		let queue = Object.keys(message.client.songQueue).length;
         if (queue === 0) {
             console.log('queue empty');

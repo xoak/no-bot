@@ -1,5 +1,5 @@
 const ytpl = require('ytpl');
-const functions = require('../functions');
+const functions = require('../music/functions');
 
 module.exports = {
 	name: 'playlist',

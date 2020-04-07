@@ -1,4 +1,4 @@
-const functions = require('../functions');
+const functions = require('../music/functions');
 const ytscrape = require('scrape-youtube');
 
 module.exports = {
