@@ -3,7 +3,7 @@ const client = new Client();
 const fs = require('fs');
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const config = require('./config/config.json');
+const { prefix, token } = require('./config/config.json');
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -23,33 +23,22 @@ client.playing = false;
 client.currVideoID = 0;
 
 client.on('message', message => {
-    if (message.content === '!ping'){
-        client.commands.get('ping').execute(message);
-    }
     if (message.content.toLowerCase().includes(' cp')) {
         client.commands.get('cp').execute(message);
     }
-    if (message.content.startsWith('!google ')){
-        let args = message.content.slice(8);
-        client.commands.get('google').execute(message, args);
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+
+    const command = message.content.slice(prefix.length).split(/ +/)[0];
+
+    if (!client.commands.has(command)) return;
+
+    try {
+        client.commands.get(command).execute(message);
+    } catch (error) {
+        console.error(error);
+        message.reply('There was an error executing that command.');
     }
-    if (message.content.startsWith('!playlist ')){
-        let args = message.content.slice(10);
-        client.commands.get('playlist').execute(message, args);
-    }
-    if (message.content.startsWith('!clear')){
-        client.commands.get('clear').execute(message);
-    }
-    if (message.content.startsWith('!replay')){
-        client.commands.get('replay').execute(message);
-    }
-    if (message.content.startsWith('!skip')){
-        client.commands.get('skip').execute(message);
-    }
-    if (message.content.startsWith('!play ')){
-        let args = message.content.slice(6);
-       client.commands.get('play').execute(message, args);
-    }
+
 });
 
-client.login(config.token);
+client.login(token);

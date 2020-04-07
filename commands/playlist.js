@@ -4,7 +4,8 @@ const functions = require('../functions');
 module.exports = {
 	name: 'playlist',
 	description: 'Adds a YouTube playlist to the queue',
-	execute(message, args) {
+	execute(message) {
+        let args = message.content.slice(10);
 		if (args.startsWith('https://www.youtube.com/playlist?list=P')){
             //do playlist stuff
             let playlistID = message.content.slice(38);

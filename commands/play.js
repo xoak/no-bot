@@ -4,9 +4,10 @@ const ytscrape = require('scrape-youtube');
 module.exports = {
 	name: 'play',
 	description: 'Plays a song from search string or URL',
-	execute(message, args) {
+	execute(message) {
 		 //protection from noah
         //play direct link
+        let args = message.content.slice(6);
         if (args.startsWith('https://www.youtube.com/watch?v=') && message.content.length === 43){
             let videoID = args.slice(32);
             //add url to queue
@@ -14,7 +15,7 @@ module.exports = {
             if (!message.client.playing) functions.playSong(message.client);
             console.log(message.client.songQueue);
         } else {
-            let search = args;
+            let search = message.content.slice(6);;
             console.log(search);
             ytscrape.search(search, {
                 limit : 1,

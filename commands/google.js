@@ -4,9 +4,9 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'google',
 	description: 'Google Search',
-	execute(message, args) {
+	execute(message) {
 		const options = {};
-        search = args;
+        search = message.content.slice(8);
         googleIt({options, 
                 'query': search,
                 'only-urls': false,
