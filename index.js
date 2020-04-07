@@ -4,6 +4,9 @@ const fs = require('fs');
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const { prefix, token } = require('./config/config.json');
+const music = require('./music/index')
+
+music.init(client);
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
@@ -17,10 +20,6 @@ client.on('ready', () => {
 client.cp_rand = Math.floor((Math.random() * 10) + 1);
 console.log(client.cp_rand);
 client.cp_count = 0;
-
-client.songQueue = {};
-client.playing = false;
-client.currVideoID = 0;
 
 client.on('message', message => {
     if (message.content.toLowerCase().includes(' cp')) {
