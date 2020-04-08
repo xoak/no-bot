@@ -1,4 +1,4 @@
-const functions = require('../music/functions');
+//const functions = require('../music/functions');
 const ytscrape = require('scrape-youtube');
 
 module.exports = {
@@ -11,8 +11,8 @@ module.exports = {
         if (args.startsWith('https://www.youtube.com/watch?v=') && message.content.length === 43){
             let videoID = args.slice(32);
             //add url to queue
-            functions.addToQueue(videoID, message.client);
-            if (!message.client.playing) functions.playSong(message.client);
+            message.client.music.addToQueue(videoID, message.client);
+            if (!message.client.playing) message.client.music.playSong(message.client);
             console.log(message.client.songQueue);
         } else {
             let search = message.content.slice(6);;
@@ -29,10 +29,10 @@ module.exports = {
                     message.channel.send('```' + results[0].link + '```');
                 } else {
                     console.log(videoID);
-                    functions.addToQueue(videoID, message.client);
+                    message.client.music.addToQueue(videoID, message.client);
                     message.channel.send('Adding `' + title + '` to the queue.');
                     console.log(message.client.songQueue);
-                    if (!message.client.playing) functions.playSong(message.client);
+                    if (!message.client.playing) message.client.music.playSong(message.client);
                 }
             }, function(err){
                 console.log(err);

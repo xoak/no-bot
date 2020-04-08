@@ -1,5 +1,5 @@
 const ytpl = require('ytpl');
-const functions = require('../music/functions');
+//const functions = require('../music/functions');
 
 module.exports = {
 	name: 'playlist',
@@ -15,12 +15,12 @@ module.exports = {
                 //console.log(playlist.items.length);
                 for (item in playlist.items){
                   let videoID = playlist.items[item].id;
-                  functions.addToQueue(videoID, message.client);
+                  message.client.music.addToQueue(videoID, message.client);
                   //console.log(playlist.items[item].id);
                 }
                 message.channel.send('Playlist is being queued.');
                 console.log(message.client.songQueue);
-                if (!message.client.playing) functions.playSong(message.client);
+                if (!message.client.playing) message.client.music.playSong(message.client);
             });
         } else {
             message.reply('That does not look like a playlist link.');

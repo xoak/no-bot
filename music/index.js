@@ -5,5 +5,6 @@ module.exports = {
         client.songQueue = {};
         client.playing = false;
         client.currVideoID = 0;
+        client.music = require('./functions');
     }
 };

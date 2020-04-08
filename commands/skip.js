@@ -1,4 +1,4 @@
-const functions = require('../music/functions');
+//const functions = require('../music/functions');
 
 module.exports = {
 	name: 'skip',
@@ -13,7 +13,7 @@ module.exports = {
             console.log(message.client.songQueue);
         } else {
             console.log(message.client.songQueue);
-            functions.playSong(message.client);
+            message.client.music.playSong(message.client);
         }
 	},
 };
