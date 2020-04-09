@@ -15,7 +15,7 @@ module.exports = {
                 //console.log(playlist.items.length);
                 for (item in playlist.items){
                   let videoID = playlist.items[item].id;
-                  message.client.music.addToQueue(videoID, message.client);
+                  message.client.music.queue.add(videoID, message.client);
                   //console.log(playlist.items[item].id);
                 }
                 message.channel.send('Playlist is being queued.');

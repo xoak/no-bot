@@ -11,7 +11,7 @@ module.exports = {
         if (args.startsWith('https://www.youtube.com/watch?v=') && message.content.length === 43){
             let videoID = args.slice(32);
             //add url to queue
-            message.client.music.addToQueue(videoID, message.client);
+            message.client.music.queue.add(videoID, message.client);
             if (!message.client.playing) message.client.music.playSong(message.client);
             console.log(message.client.songQueue);
         } else {
@@ -29,7 +29,7 @@ module.exports = {
                     message.channel.send('```' + results[0].link + '```');
                 } else {
                     console.log(videoID);
-                    message.client.music.addToQueue(videoID, message.client);
+                    message.client.music.queue.add(videoID, message.client);
                     message.channel.send('Adding `' + title + '` to the queue.');
                     console.log(message.client.songQueue);
                     if (!message.client.playing) message.client.music.playSong(message.client);
