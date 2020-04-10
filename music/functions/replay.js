@@ -1,7 +1,7 @@
 module.exports = function replay(message) {
     if (message.client.playing){
         message.channel.send('Replaying song');
-        let voiceChannel = message.client.channels.cache.get('228406262298050571');
+        let voiceChannel = message.client.channels.cache.get(message.client.music.voiceChannel);
         videoID = message.client.currVideoID;
         voiceChannel.join()
             .then(connection => {

@@ -1,8 +1,8 @@
 module.exports = function next(message) {
-    var songs = Object.keys(message.client.songQueue);
+    let songs = Object.keys(message.client.songQueue);
+    let voiceChannel = message.client.channels.cache.get(message.client.music.voiceChannel);
     if (songs.length > 0){
         let videoID = songs[0];
-        let voiceChannel = message.client.channels.cache.get('228406262298050571');
         voiceChannel.join()
             .then(connection => {
                 url = 'https://www.youtube.com/watch?v=' + videoID;
@@ -13,7 +13,6 @@ module.exports = function next(message) {
     } else {
         console.log('queue empty');
         message.channel.send('No songs to play. Goodbye');
-        let voiceChannel = message.client.channels.cache.get('228406262298050571');
         voiceChannel.leave();
         console.log(message.client.songQueue);
     }

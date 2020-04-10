@@ -1,5 +1,6 @@
 {
     "prefix": "!",
     "token": "bot-token",
-    "api-key": "youtube-api-key"
+    "apiKey": "youtube-api-key",
+    "voiceChannel": "voice-channel"
 }

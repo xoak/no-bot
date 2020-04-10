@@ -3,7 +3,7 @@ module.exports = function skip(message) {
         if (queue === 0) {
             console.log('queue empty');
             message.channel.send('No songs to play. Goodbye');
-            let voiceChannel = message.client.channels.cache.get('228406262298050571');
+            let voiceChannel = message.client.channels.cache.get(message.client.music.voiceChannel);
             voiceChannel.leave();
             message.client.playing = false;
             console.log(message.client.songQueue);

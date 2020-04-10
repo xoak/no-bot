@@ -3,10 +3,10 @@ const client = new Client();
 const fs = require('fs');
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const { prefix, token } = require('./config/config.json');
+const { prefix, token, voiceChannel } = require('./config/config.json');
 const music = require('./music/index')
 
-music.init(client);
+music.init(client, voiceChannel);
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
