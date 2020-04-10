@@ -6,7 +6,7 @@ module.exports = function next(message) {
         voiceChannel.join()
             .then(connection => {
                 url = 'https://www.youtube.com/watch?v=' + videoID;
-                message.client.music.play(connection, url, videoID, message);
+                message.client.music.stream(connection, url, videoID, message);
                 message.client.playing = true;
                 message.client.currVideoID = videoID;
             });

@@ -15,12 +15,12 @@ module.exports = {
                 //console.log(playlist.items.length);
                 for (item in playlist.items){
                   let videoID = playlist.items[item].id;
-                  message.client.music.queue.add(videoID, message.client);
+                  message.client.music.queue.add(videoID, message);
                   //console.log(playlist.items[item].id);
                 }
                 message.channel.send('Playlist is being queued.');
                 console.log(message.client.songQueue);
-                if (!message.client.playing) message.client.music.playSong(message.client);
+                if (!message.client.playing) message.client.music.next(message);
             });
         } else {
             message.reply('That does not look like a playlist link.');
