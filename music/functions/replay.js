@@ -1,14 +1,16 @@
-exports.replay = function replay(client) {
-    if (client.playing){
-        let voiceChannel = client.channels.cache.get('228406262298050571');
-        videoID = client.currVideoID;
+module.exports = function replay(message) {
+    if (message.client.playing){
+        message.channel.send('Replaying song');
+        let voiceChannel = message.client.channels.cache.get('228406262298050571');
+        videoID = message.client.currVideoID;
         voiceChannel.join()
             .then(connection => {
                 url = 'https://www.youtube.com/watch?v=' + videoID;
-                client.music.play(connection, url, videoID, client);
-                client.playing = true;
+                message.client.music.play(connection, url, videoID, client);
+                message.client.playing = true;
             });
     } else {
+        message.channel.send('No song to replay');
         console.log('no song to replay');
     }
 };
