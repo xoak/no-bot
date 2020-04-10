@@ -11,6 +11,10 @@ module.exports = function next(message) {
                 message.client.currVideoID = videoID;
             });
     } else {
-        console.log('queue is empty');
+        console.log('queue empty');
+        message.channel.send('No songs to play. Goodbye');
+        let voiceChannel = message.client.channels.cache.get('228406262298050571');
+        voiceChannel.leave();
+        console.log(message.client.songQueue);
     }
 };

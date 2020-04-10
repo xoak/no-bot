@@ -1,5 +1,3 @@
-
-
 module.exports = function play(message) {
     let args = message.content.slice(6);
     if (args.startsWith('https://www.youtube.com/watch?v=') && message.content.length === 43){
