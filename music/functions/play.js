@@ -1,5 +1,5 @@
 module.exports = function play(message) {
-    let args = message.content.slice(6);
+    let args = message.content.replace(/^[\S]+[\s]+/, '');
     if (args.startsWith('https://www.youtube.com/watch?v=') && message.content.length === 43){
         let videoID = args.slice(32);
         //add url to queue

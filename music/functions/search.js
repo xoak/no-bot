@@ -1,9 +1,9 @@
 const ytscrape = require('scrape-youtube');
 
 module.exports = function search(message) {
-    let search = message.content.slice(6);
-    console.log(search);
-    ytscrape.search(search, {
+    let query = message.content.replace(/^[\S]+[\s]+/, '');
+    console.log(query);
+    ytscrape.search(query, {
         limit : 1,
         type : 'video'
     }).then(function(results){
