@@ -1,8 +1,8 @@
 module.exports = {
-    remove: function remove(videoID, client) {
-        delete client.songQueue[videoID];
+    remove: function remove(videoID, message) {
+        delete message.client.songQueue[videoID];
     },
-    add: function add(videoID, client) {
-        client.songQueue[videoID] = 1;
+    add: function add(videoID, message) {
+        message.client.songQueue[videoID] = 1;
     }
 };

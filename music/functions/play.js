@@ -1,6 +1,6 @@
 const ytdl = require('ytdl-core-discord');
 
-module.exports = async function play(connection, url, videoID, client) {
+module.exports = async function play(connection, url, videoID, message) {
     const dispatcher = connection.play(await ytdl(url, {
         quality: 'highestaudio',
         highWaterMark: 1<<25
@@ -8,10 +8,10 @@ module.exports = async function play(connection, url, videoID, client) {
         type: 'opus',
         highWaterMark: 1
     });
-    client.music.queue.remove(videoID, client);
+    message.client.music.queue.remove(videoID, message);
     dispatcher.on('finish', () => {
-        client.playing = false;
-        client.currVideoID = 0;
-        client.music.playSong(client);                  
+        message.client.playing = false;
+        message.client.currVideoID = 0;
+        message.client.music.next(message);                  
     });
 };

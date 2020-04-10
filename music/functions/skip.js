@@ -11,6 +11,6 @@ module.exports = function skip(message) {
             message.channel.send('Skipped.');
             console.log('song skipped');
             console.log(message.client.songQueue);
-            message.client.music.playSong(message.client);
+            message.client.music.next(message);
         }
 };
