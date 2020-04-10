@@ -1,4 +1,4 @@
-const ytscrape = require('scrape-youtube');
+
 
 module.exports = function play(message) {
     let args = message.content.slice(6);
@@ -10,27 +10,6 @@ module.exports = function play(message) {
         console.log(message.client.songQueue);
     } else {
         //search
-        let search = message.content.slice(6);;
-        console.log(search);
-        ytscrape.search(search, {
-            limit : 1,
-            type : 'video'
-        }).then(function(results){
-            console.log(results);
-            let videoID = results[0].link.slice(28,39);
-            let title = results[0].title;
-            if (videoID === 'ww.googlead') {
-                message.channel.send('try something else: ' + '`' + search + '`');
-                message.channel.send('```' + results[0].link + '```');
-            } else {
-                console.log(videoID);
-                message.client.music.queue.add(videoID, message);
-                message.channel.send('Adding `' + title + '` to the queue.');
-                console.log(message.client.songQueue);
-                if (!message.client.playing) message.client.music.next(message);
-            }
-        }, function(err){
-            console.log(err);
-        });
+        message.client.music.search(message);
     }
 };
