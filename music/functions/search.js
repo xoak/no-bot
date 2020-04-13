@@ -11,7 +11,7 @@ module.exports = function search(message) {
         let videoID = results[0].link.slice(28,39);
         let title = results[0].title;
         if (videoID === 'ww.googlead') {
-            message.channel.send('try something else: ' + '`' + search + '`');
+            message.channel.send('try something else: ' + '`' + query + '`');
             message.channel.send('```' + results[0].link + '```');
         } else {
             console.log(videoID);
