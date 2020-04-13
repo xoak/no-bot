@@ -21,7 +21,7 @@ function playlist(message){
 module.exports = function play(message) {
     let args = message.content.replace(/^[\S]+[\s]+/, '');
     //direct link
-    if (args.startsWith('https://www.youtube.com/watch?v=') && message.content.length === 43){
+    if (args.startsWith('https://www.youtube.com/watch?v=')){
         let videoID = args.slice(32);
         //add url to queue
         message.client.music.queue.add(videoID, message);
