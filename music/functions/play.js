@@ -5,11 +5,9 @@ function playlist(message){
     console.log(playlistID);
     ytpl(playlistID, function(err, playlist) {
         if(err) throw err;
-        //console.log(playlist.items.length);
         for (item in playlist.items){
             let videoID = playlist.items[item].id;
             message.client.music.queue.add(videoID, message);
-            //console.log(playlist.items[item].id);
         }
         message.channel.send('Playlist is being queued.');
         console.log(message.client.songQueue);
@@ -17,12 +15,20 @@ function playlist(message){
     });
 }
 
-
 module.exports = function play(message) {
     let args = message.content.replace(/^[\S]+[\s]+/, '');
     //direct link
-    if (args.startsWith('https://www.youtube.com/watch?v=')){
-        let videoID = args.slice(32);
+    //youtube.com/watch?v=
+    if (args.match(/^.*youtube.com\/watch\?v=\S{11}.*/i)){
+        let videoID = args.split('?v=')[1].slice(0,11);
+        console.log(videoID);
+        //add url to queue
+        message.client.music.queue.add(videoID, message);
+        if (!message.client.playing) message.client.music.next(message);
+        console.log(message.client.songQueue);
+    } else if (args.match(/^.*youtu.be\/\S{11}.*/i)) {
+        let videoID = args.split('be/')[1].slice(0,11);
+        console.log(videoID);
         //add url to queue
         message.client.music.queue.add(videoID, message);
         if (!message.client.playing) message.client.music.next(message);
