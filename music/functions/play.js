@@ -18,18 +18,15 @@ function playlist(message){
 module.exports = function play(message) {
     let args = message.content.replace(/^[\S]+[\s]+/, '');
     //direct link
-    //youtube.com/watch?v=
     if (args.match(/^.*youtube.com\/watch\?v=\S{11}.*/i)){
         let videoID = args.split('?v=')[1].slice(0,11);
         console.log(videoID);
-        //add url to queue
         message.client.music.queue.add(videoID, message);
         if (!message.client.playing) message.client.music.next(message);
         console.log(message.client.songQueue);
     } else if (args.match(/^.*youtu.be\/\S{11}.*/i)) {
         let videoID = args.split('be/')[1].slice(0,11);
         console.log(videoID);
-        //add url to queue
         message.client.music.queue.add(videoID, message);
         if (!message.client.playing) message.client.music.next(message);
         console.log(message.client.songQueue);
