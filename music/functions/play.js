@@ -34,7 +34,7 @@ module.exports = function play(message) {
         if (!message.client.playing) message.client.music.next(message);
         console.log(message.client.songQueue);
     //playlist
-    } else if (args.startsWith('https://www.youtube.com/playlist?list=P')){
+    } else if (args.match(/^.*youtube.com\/playlist\?list=P\S*/i)){
         playlist(message);
     //search
     } else {
