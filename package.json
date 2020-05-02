@@ -19,10 +19,10 @@
   "homepage": "https://github.com/your-welcome/no-bot#readme",
   "dependencies": {
     "@discordjs/opus": "^0.1.0",
-    "discord.js": "^12.1.1",
+    "discord.js": "^12.2.0",
     "google-it": "^1.5.0",
     "nodemon": "^2.0.3",
-    "scrape-youtube": "0.0.9",
+    "scrape-youtube": "^0.1.7",
     "ytdl-core-discord": "^1.2.0",
     "ytpl": "^0.1.20"
   },
