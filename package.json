@@ -24,7 +24,7 @@
     "nodemon": "^2.0.3",
     "scrape-youtube": "^0.2.0",
     "ytdl-core-discord": "^1.2.0",
-    "ytpl": "^0.1.20"
+    "ytpl": "^0.1.21"
   },
   "devDependencies": {}
 }
