@@ -1,4 +1,4 @@
-const ytscrape = require('scrape-youtube').youtube;
+const ytscrape = require('scrape-youtube').default;
 
 module.exports = function search(message) {
     let query = message.content.replace(/^[\S]+[\s]+/, '');
