@@ -4,7 +4,7 @@ const fs = require('fs');
 client.commands = new Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const { prefix, token, voiceChannel } = require('./config/config.json');
-const music = require('./music/index')
+const music = require('../discord.js-musicbot-plugin');
 
 music.init(client, voiceChannel);
 
